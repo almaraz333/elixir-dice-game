@@ -8,6 +8,7 @@ defmodule DiceWeb.Router do
     plug :put_root_layout, html: {DiceWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug DiceWeb.Plugs.Locale, "en"
   end
 
   pipeline :api do
@@ -17,7 +18,9 @@ defmodule DiceWeb.Router do
   scope "/", DiceWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", HomeLive, :home
+    # live "/game", GameLive, :index
+    live "/game/:id", GameLive, :index
   end
 
   # Other scopes may use custom stacks.

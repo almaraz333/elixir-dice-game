@@ -32,6 +32,7 @@ defmodule Dice.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:elixir_uuid, "~> 1.1"},
       {:phoenix, "~> 1.7.18"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},

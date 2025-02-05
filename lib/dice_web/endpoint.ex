@@ -11,6 +11,10 @@ defmodule DiceWeb.Endpoint do
     same_site: "Lax"
   ]
 
+  socket "/socket", DiceWeb.GameSocket,
+    websocket: true,
+    longpoll: true
+
   socket "/live", Phoenix.LiveView.Socket,
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
@@ -49,5 +53,16 @@ defmodule DiceWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug :introspect
   plug DiceWeb.Router
+
+  def introspect(conn, _opts) do
+    IO.puts("""
+    Verb: #{inspect(conn.method)}
+    Host: #{inspect(conn.host)}
+    Headers: #{inspect(conn.req_headers)}
+    """)
+
+    conn
+  end
 end

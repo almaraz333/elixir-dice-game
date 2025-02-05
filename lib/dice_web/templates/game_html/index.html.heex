@@ -1,0 +1,33 @@
+<section>
+  <div :if={@game_state.dice} class="mb-4 flex gap-3">
+    <%= for die <- @game_state.dice do %>
+      <span class="border border-white py-2 px-4">{die}</span>
+      <% end %>
+  </div>
+  <h1>Amount Value: {@form_state.amount_value}</h1>
+  <h1>Die Value: {@form_state.die_value}</h1>
+
+  <form phx-change="form_change" phx-submit="bid">
+    <div class="text-black mt-2 block w-48 rounded-md bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm">
+      <.input type="select" name="amount_option" options={@form_state.amount_options} value={@form_state.amount_value} />
+    </div>
+    <div class="text-black mt-2 block w-48 rounded-md bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm">
+      <.input type="select" name="dice_option" options={@form_state.dice_options} value={@form_state.die_value} />
+    </div>
+
+    <.button type="submit">
+      Bid
+    </.button>
+  </form>
+
+  <.button phx-click="call-clicked">
+    Challenge
+  </.button>
+
+
+  <button phx-click="ping-clicked" class="bg-white text-black">Live View Ping</button>
+  <button phx-click="roll-dice" class="bg-white text-black">ROLL</button>
+  <div id="logContainer" style="white-space: pre;">
+    <%= Enum.join(@game_state.logs, "\n" ) %>
+  </div>
+</section>
