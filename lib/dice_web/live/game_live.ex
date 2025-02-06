@@ -5,14 +5,13 @@ defmodule DiceWeb.GameLive do
 
   def mount(%{"id" => room_id}, _session, socket) do
     if connected?(socket) do
-      DiceWeb.Endpoint.broadcast_from!(
-        self(),
+      DiceWeb.Endpoint.subscribe("room:" <> room_id)
+
+      DiceWeb.Endpoint.broadcast!(
         "room:" <> room_id,
         "log",
         %{player_id: socket.id, action: "join"}
       )
-
-      DiceWeb.Endpoint.subscribe("room:" <> room_id)
     end
 
     dice_options = ["Which Die?", 1, 2, 3, 4, 5, 6]
@@ -28,11 +27,11 @@ defmodule DiceWeb.GameLive do
     game_state = %{
       curr_turn_player_id: nil,
       dice: nil,
-      players: [],
+      players: %{},
       player_id: socket.id,
       is_curr_players_turn: false,
       room_id: room_id,
-      logs: ["User #{socket.id} has joined"]
+      logs: []
     }
 
     socket =
@@ -76,6 +75,17 @@ defmodule DiceWeb.GameLive do
 
     {:noreply, socket}
   end
+
+  # def handle_event("ready-clicked", _value, socket) do
+  #   DiceWeb.Endpoint.broadcast!(
+  #     # self(),
+  #     "room:" <> socket.assigns.game_state.room_id,
+  #     "log",
+  #     %{player_id: socket.id, action: "join"}
+  #   )
+
+  #   {:noreply, socket}
+  # end
 
   def handle_event("roll-dice", _value, socket) do
     dice = Enum.map(1..5, fn _ -> :rand.uniform(6) end)
@@ -134,6 +144,9 @@ defmodule DiceWeb.GameLive do
               ["User #{payload.player_id} has joined"]
 
           update(socket, :game_state, fn state -> Map.put(state, :logs, new_logs) end)
+          |> update(:game_state, fn state ->
+            %{state | :players => Map.put(state.players, payload.player_id, "joined")}
+          end)
 
         _ ->
           socket
