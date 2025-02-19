@@ -82,4 +82,9 @@ defmodule DiceWeb.RoomChannel do
   # defp authorized?(_payload) do
   #   true
   # end
+
+  def handle_info({:room_updated, room_id}, socket) do
+
+    {:noreply, socket}
+  end
 end

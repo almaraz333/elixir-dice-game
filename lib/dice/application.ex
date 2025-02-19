@@ -14,6 +14,8 @@ defmodule Dice.Application do
        repos: Application.fetch_env!(:dice, :ecto_repos), skip: skip_migrations?()},
       {DNSCluster, query: Application.get_env(:dice, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: Dice.PubSub},
+      {Registry, keys: :unique, name: Dice.GameRegistry},
+      {DynamicSupervisor, name: Dice.GameRoomSupervisor, strategy: :one_for_one},
       # Start the Finch HTTP client for sending emails
       {Finch, name: Dice.Finch},
       # Start a worker by calling: Dice.Worker.start_link(arg)

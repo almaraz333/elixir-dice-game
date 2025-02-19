@@ -1,9 +1,10 @@
 <section>
-  <div :if={@game_state.dice} class="mb-4 flex gap-3">
-    <%= for die <- @game_state.dice do %>
+  <div :if={@game_state.players[@player_id].dice} class="mb-4 flex gap-3">
+    <%= for die <- @game_state.players[@player_id].dice do %>
       <span class="border border-white py-2 px-4">{die}</span>
       <% end %>
   </div>
+
   <h1>Amount Value: {@form_state.amount_value}</h1>
   <h1>Die Value: {@form_state.die_value}</h1>
 
