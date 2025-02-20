@@ -82,7 +82,7 @@ defmodule Dice.GameRoom do
 
   @impl true
   def handle_call({:log, message}, _from, state) do
-    new_state = update_in(state, [:logs], fn logs -> logs ++ [message] end)
+    new_state = update_in(state, [:logs], fn logs -> [message | logs] end)
 
     Phoenix.PubSub.broadcast(Dice.PubSub, "room:#{state.room_id}", {:room_updated, state.room_id})
 

@@ -32,6 +32,6 @@
   <button phx-click="ping-clicked" class="bg-white text-black">Live View Ping</button>
   <button phx-click="roll-dice" class="bg-white text-black">ROLL</button>
   <div id="logContainer" style="white-space: pre;">
-    <%= Enum.join(@game_state.logs, "\n" ) %>
+    <%= Enum.join(Enum.reverse(@game_state.logs), " \n" ) %>
   </div>
 </section>
